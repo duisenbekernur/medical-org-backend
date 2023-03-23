@@ -16,6 +16,46 @@ const addNews = async (req, res) => {
   }
 };
 
+const deleteNews = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const isExist = await News.findOne({
+      where: { id },
+    });
+    if (!isExist) {
+      return res.json({
+        message: "Новости с таким айди не существует",
+      });
+    }
+
+    await News.destroy({
+      where: {
+        id,
+      },
+    });
+
+    res.json({ message: "Успешно удалено!" });
+  } catch (error) {}
+};
+
+const updateNews = async (req, res) => {
+  try {
+    const { text, image, id } = req.body;
+
+    const currentNews = await News.findOne({ where: { id } });
+
+    await News.update(
+      {
+        text: text !== undefined ? text : currentNews.text,
+        image: image !== undefined ? image : currentNews.image,
+      },
+      { where: { id } }
+    );
+
+    return res.json({ message: "Успешно изменено" });
+  } catch (error) {}
+};
+
 const addMedicalOrganization = async (req, res) => {
   try {
     const { name, city, phone } = req.body;
@@ -55,4 +95,10 @@ const addRoute = async (req, res) => {
   }
 };
 
-module.exports = { addNews, addMedicalOrganization, addRoute };
+module.exports = {
+  addNews,
+  addMedicalOrganization,
+  addRoute,
+  deleteNews,
+  updateNews,
+};

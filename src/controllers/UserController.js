@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const {
   News,
   Routes,
@@ -57,9 +58,40 @@ const getProfileById = async (req, res) => {
   }
 };
 
+const changeProfile = async (req, res) => {
+  try {
+    const { lastName, firstName, phone, email, organization } = req.body;
+
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.json({
+        message: "Нету доступа",
+      });
+    }
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+    const user = await Users.findOne({ where: { id: decoded.id } });
+
+    const newUser = await Users.update(
+      {
+        lastName: lastName !== undefined ? lastName : user.lastName,
+        firstName: firstName !== undefined ? firstName : user.firstName,
+        phone: phone !== undefined ? phone : user.phone,
+        email: email !== undefined ? email : user.email,
+        organization:
+          organization !== undefined ? organization : user.organization,
+      },
+      { where: { id: decoded.id } }
+    );
+    return res.json({ message: "Успешно изменено" });
+  } catch (error) {}
+};
+
 module.exports = {
   getAllNews,
   getAllBusses,
   getAllMedicalOrganizations,
   getProfileById,
+  changeProfile,
 };
