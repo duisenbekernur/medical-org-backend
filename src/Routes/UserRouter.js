@@ -13,6 +13,6 @@ const router = Router();
 router.get("/news", checkAuth, getAllNews);
 router.get("/busses", checkAuth, getAllBusses);
 router.get("/organizations", checkAuth, getAllMedicalOrganizations);
-router.get("/profile/:id", checkAuth, getProfileById);
+router.post("/profile/", checkAuth, getProfileById);
 
 module.exports = router;

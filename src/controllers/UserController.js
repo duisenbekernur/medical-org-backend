@@ -37,7 +37,7 @@ const getAllMedicalOrganizations = async (req, res) => {
 
 const getProfileById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
 
     const user = await Users.findOne({ where: { id } });
 
@@ -50,6 +50,7 @@ const getProfileById = async (req, res) => {
       lastName: user.lastName,
       phone: user.phone,
       organization: user.organization,
+      email: user.email,
     });
   } catch (error) {
     console.log("error get profile", error);
