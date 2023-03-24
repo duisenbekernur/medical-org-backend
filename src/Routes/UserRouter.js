@@ -5,7 +5,6 @@ const {
   getAllBusses,
   getAllMedicalOrganizations,
   getProfileById,
-  changeProfile,
 } = require("../controllers/UserController.js");
 const checkAuth = require("../middlewares/checkAuth.js");
 
@@ -16,6 +15,5 @@ router.get("/busses", checkAuth, getAllBusses);
 router.get("/organizations", checkAuth, getAllMedicalOrganizations);
 router.post("/profile", checkAuth, getProfileById);
 
-router.put("/profile", checkAuth, changeProfile);
 
 module.exports = router;

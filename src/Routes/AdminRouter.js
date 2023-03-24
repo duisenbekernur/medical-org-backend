@@ -7,6 +7,9 @@ const {
   addRoute,
   deleteNews,
   updateNews,
+  changeProfile,
+  changeRoutes,
+  changeMedOrganization,
 } = require("../controllers/AdminController.js");
 
 const router = Router();
@@ -17,5 +20,8 @@ router.post("/add-route", isAdmin, addRoute);
 
 router.delete("/delete-news", isModerator, deleteNews);
 router.put("/update-news", isModerator, updateNews);
+router.put("/profile", isAdmin, changeProfile);
+router.put("/route", isAdmin, changeRoutes);
+router.put("/medical-organization", isAdmin, changeMedOrganization);
 
 module.exports = router;

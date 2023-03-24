@@ -1,4 +1,9 @@
-const { News, MedicalOrganizations, Routes } = require("../models/Models.js");
+const {
+  News,
+  MedicalOrganizations,
+  Routes,
+  Users,
+} = require("../models/Models.js");
 
 const addNews = async (req, res) => {
   try {
@@ -95,10 +100,85 @@ const addRoute = async (req, res) => {
   }
 };
 
+const changeProfile = async (req, res) => {
+  try {
+    const { lastName, firstName, phone, email, organization, id } = req.body;
+
+    if (!id) return res.json({ message: "Введите айди пользователя" });
+
+    const user = await Users.findOne({ where: { id } });
+
+    // console.log("HERE");
+
+    const newUser = await Users.update(
+      {
+        lastName: lastName !== undefined ? lastName : user.lastName,
+        firstName: firstName !== undefined ? firstName : user.firstName,
+        phone: phone !== undefined ? phone : user.phone,
+        email: email !== undefined ? email : user.email,
+        organization:
+          organization !== undefined ? organization : user.organization,
+      },
+      { where: { id } }
+    );
+
+    return res.json({ message: "Успешно" });
+  } catch (error) {}
+};
+
+const changeRoutes = async (req, res) => {
+  try {
+    const { stops, image, name, id } = req.body;
+
+    if (!id) return res.json({ message: "Введите айди маршрута" });
+
+    const bus = await Routes.findOne({ where: { id } });
+
+    // console.log("HERE");
+
+    const newBus = await Routes.update(
+      {
+        stops: stops !== undefined ? stops : bus.stops,
+        image: image !== undefined ? image : bus.image,
+        name: name !== undefined ? name : bus.name,
+      },
+      { where: { id } }
+    );
+
+    return res.json({ message: "Успешно" });
+  } catch (error) {}
+};
+
+const changeMedOrganization = async (req, res) => {
+  try {
+    const { name, city, phone, id } = req.body;
+
+    if (!id) return res.json({ message: "Введите айди маршрута" });
+
+    const organization = await MedicalOrganizations.findOne({ where: { id } });
+
+    // console.log("HERE");
+
+    const newOrganization = await MedicalOrganizations.update(
+      {
+        name: name !== undefined ? name : organization.name,
+        city: city !== undefined ? city : organization.city,
+        phone: phone !== undefined ? phone : organization.phone,
+      },
+      { where: { id } }
+    );
+
+    return res.json({ message: "Успешно" });
+  } catch (error) {}
+};
+
 module.exports = {
   addNews,
   addMedicalOrganization,
   addRoute,
   deleteNews,
   updateNews,
+  changeProfile,
+  changeRoutes,
+  changeMedOrganization,
 };
